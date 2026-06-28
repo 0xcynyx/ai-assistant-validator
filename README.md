@@ -1,4 +1,4 @@
-# Waqas AI Evaluation MVP
+# AI Evaluation MVP
 
 This project is a lightweight, production-minded evaluation pipeline for reviewing AI-generated customer-support answers against policy and quality expectations. It combines deterministic rule checks with an LLM-based judge so reviewers can inspect both reproducible signals and nuanced judgment.
 
