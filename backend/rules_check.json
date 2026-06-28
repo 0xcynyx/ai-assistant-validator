@@ -1,0 +1,1 @@
+{"version":"1.0.0","checks":["pii_request","absolute_guarantee","required_points","response_length","prompt_injection"]}

@@ -1,0 +1,5 @@
+.env
+waqas_ai_prd.md
+
+#ignore all node_modules
+frontend/node_modules/**/*
