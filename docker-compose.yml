@@ -2,6 +2,8 @@ services:
   backend:
     build: ./backend
     ports: ["8003:8000"]
+    volumes:
+      - ./backend/output:/app/output
   frontend:
     build: ./frontend
     ports: ["3003:80"]

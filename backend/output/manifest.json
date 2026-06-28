@@ -1,0 +1,16 @@
+{
+  "run_id": "run-16dda41f",
+  "stage": "REPORT_GENERATED",
+  "mock_mode": false,
+  "case_count": 3,
+  "artifacts": {
+    "rule_checks": "/app/output/rule_checks.json",
+    "llm_evaluations": "/app/output/llm_evaluations.json",
+    "final_scores": "/app/output/final_scores.json",
+    "report": "/app/output/report.md",
+    "disagreements": "/app/output/disagreements.json"
+  },
+  "errors": [],
+  "started_at": "2026-06-28T09:18:21.796655+00:00",
+  "finished_at": "2026-06-28T09:18:21.796672+00:00"
+}

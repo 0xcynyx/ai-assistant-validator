@@ -1,0 +1,78 @@
+[
+  {
+    "case_id": "case_001",
+    "policy_adherence": "fail",
+    "customer_helpfulness": "fail",
+    "risk_level": "high",
+    "reasoning": [
+      "[MOCK] Derived from deterministic flags: ['ABSOLUTE_GUARANTEE', 'DISALLOWED_ACTION_HINT', 'MISSING_REQUIRED_POINTS', 'NO_GROUNDING_SIGNAL']"
+    ],
+    "policy_violations": [
+      "ABSOLUTE_GUARANTEE",
+      "DISALLOWED_ACTION_HINT",
+      "MISSING_REQUIRED_POINTS",
+      "NO_GROUNDING_SIGNAL"
+    ],
+    "recommended_fix": "[MOCK] Use official flow, avoid risky claims, and cover required points.",
+    "relevance": 1,
+    "faithfulness": 1,
+    "clarity": 2,
+    "context_continuity": 2,
+    "safety_bias": 1,
+    "factual_claims": [],
+    "supported_claims": [],
+    "unsupported_claims": [],
+    "faithfulness_ratio": 0.0,
+    "mock": true
+  },
+  {
+    "case_id": "case_002",
+    "policy_adherence": "fail",
+    "customer_helpfulness": "fail",
+    "risk_level": "high",
+    "reasoning": [
+      "[MOCK] Derived from deterministic flags: ['ABSOLUTE_GUARANTEE', 'MISSING_REQUIRED_POINTS', 'NO_GROUNDING_SIGNAL']"
+    ],
+    "policy_violations": [
+      "ABSOLUTE_GUARANTEE",
+      "MISSING_REQUIRED_POINTS",
+      "NO_GROUNDING_SIGNAL"
+    ],
+    "recommended_fix": "[MOCK] Use official flow, avoid risky claims, and cover required points.",
+    "relevance": 1,
+    "faithfulness": 1,
+    "clarity": 2,
+    "context_continuity": 2,
+    "safety_bias": 1,
+    "factual_claims": [],
+    "supported_claims": [],
+    "unsupported_claims": [],
+    "faithfulness_ratio": 0.0,
+    "mock": true
+  },
+  {
+    "case_id": "case_003",
+    "policy_adherence": "fail",
+    "customer_helpfulness": "fail",
+    "risk_level": "high",
+    "reasoning": [
+      "[MOCK] Derived from deterministic flags: ['ABSOLUTE_GUARANTEE', 'MISSING_REQUIRED_POINTS', 'NO_GROUNDING_SIGNAL']"
+    ],
+    "policy_violations": [
+      "ABSOLUTE_GUARANTEE",
+      "MISSING_REQUIRED_POINTS",
+      "NO_GROUNDING_SIGNAL"
+    ],
+    "recommended_fix": "[MOCK] Use official flow, avoid risky claims, and cover required points.",
+    "relevance": 1,
+    "faithfulness": 1,
+    "clarity": 2,
+    "context_continuity": 2,
+    "safety_bias": 1,
+    "factual_claims": [],
+    "supported_claims": [],
+    "unsupported_claims": [],
+    "faithfulness_ratio": 0.0,
+    "mock": true
+  }
+]
