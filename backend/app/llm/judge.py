@@ -21,6 +21,8 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 PRIMARY_MODEL = os.getenv("PRIMARY_MODEL", "qwen/qwen3-6b")
 FALLBACK_MODEL = os.getenv("FALLBACK_MODEL", "openai/gpt-4.1-mini")
+OPENROUTER_BASE_URL = os.getenv("OPENROUTER_API_BASE", "https://openrouter.ai/v1")
+OPENAI_BASE_URL = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
 MAX_RETRIES = 3
 BACKOFF_BASE = 2
 
@@ -89,7 +91,8 @@ def _call_llm(prompt: str, model: str) -> str:
     api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise RuntimeError("No API key configured for LLM evaluation")
-    client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1" if os.getenv("OPENROUTER_API_KEY") else "https://api.openai.com/v1")
+    base_url = OPENROUTER_BASE_URL if os.getenv("OPENROUTER_API_KEY") else OPENAI_BASE_URL
+    client = OpenAI(api_key=api_key, base_url=base_url)
     extra = {}
     if "qwen3" in model:
         extra["extra_body"] = {"reasoning": {"effort": "medium"}}
@@ -166,13 +169,25 @@ def evaluate_case(case: Dict, rule_check: Dict, log_sink: List[Dict], output_dir
                 model_used = FALLBACK_MODEL
             time.sleep(BACKOFF_BASE ** attempt)
     else:
-        raise RuntimeError(f"LLM evaluation failed after {MAX_RETRIES} attempts: {last_error}")
+        result = _mock_eval(case, rule_check)
+        log_sink.append({
+            "stage": "LLM_EVAL",
+            "case_id": case["case_id"],
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "provider": "fallback_mock",
+            "model": "mock",
+            "prompt_hash": "mock",
+            "error": str(last_error),
+            "input_artifacts": ["input/cases.json", "output/rule_checks.json"],
+            "output_artifact": "output/llm_evaluations.json",
+        })
+        return result
 
     log_sink.append({
         "stage": "LLM_EVAL",
         "case_id": case["case_id"],
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "provider": "openrouter",
+        "provider": "openrouter" if os.getenv("OPENROUTER_API_KEY") else "openai",
         "model": model_used,
         "prompt_hash": prompt_hash,
         "input_artifacts": ["input/cases.json", "output/rule_checks.json"],

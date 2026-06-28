@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Assistant Evaluation</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 24px; background: #f7f7f7; color: #1f2937; }
+    main { max-width: 920px; margin: 0 auto; background: white; border-radius: 16px; padding: 24px; box-shadow: 0 12px 40px rgba(0,0,0,.08); }
+    h1 { margin-top: 0; }
+    .row { display: grid; gap: 16px; }
+    .card { background: #fbfbfb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
+    .button { background: #2563eb; color: white; border: none; border-radius: 10px; padding: 12px 16px; cursor: pointer; font-size: 16px; }
+    .button:disabled { opacity: .65; cursor: not-allowed; }
+    textarea { width: 100%; min-height: 180px; border: 1px solid #d1d5db; border-radius: 10px; padding: 12px; font-family: Menlo, monospace; }
+    pre { white-space: pre-wrap; word-wrap: break-word; margin: 0; }
+    .note { color: #6b7280; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>AI Assistant Evaluation</h1>
+  <p class="note">Upload a JSON file of cases or run the default case set. The backend will evaluate and return scores plus a markdown report.</p>
+  <div class="card">
+    <label for="file">Case file (optional):</label>
+    <input id="file" type="file" accept="application/json" />
+    <button id="run" class="button">Run evaluation</button>
+  </div>
+  <div id="status" class="card">Status: <strong>idle</strong></div>
+  <div class="card">
+    <h2>Result</h2>
+    <pre id="result">No result yet.</pre>
+  </div>
+  <div class="card">
+    <h2>Report</h2>
+    <textarea id="report" readonly>No report yet.</textarea>
+  </div>
+</main>
+<script>
+  const statusEl = document.getElementById('status');
+  const resultEl = document.getElementById('result');
+  const reportEl = document.getElementById('report');
+  const runButton = document.getElementById('run');
+  const fileInput = document.getElementById('file');
+
+  const setStatus = (text) => {
+    statusEl.innerHTML = 'Status: <strong>' + text + '</strong>';
+  };
+
+  const safeJson = (data) => {
+    try { return JSON.stringify(data, null, 2); } catch (err) { return String(data); }
+  };
+
+  runButton.addEventListener('click', async () => {
+    setStatus('running');
+    runButton.disabled = true;
+    resultEl.textContent = 'Working...';
+    reportEl.value = 'Fetching report...';
+
+    const form = new FormData();
+    const file = fileInput.files[0];
+    if (file) form.append('file', file);
+
+    try {
+      const resp = await fetch('/api/evaluate', { method: 'POST', body: form });
+      if (!resp.ok) throw new Error('Evaluation failed: ' + resp.statusText);
+      const data = await resp.json();
+      resultEl.textContent = safeJson(data);
+      setStatus('fetching report');
+
+      const reportResp = await fetch('/api/report');
+      if (!reportResp.ok) throw new Error('Report load failed: ' + reportResp.statusText);
+      reportEl.value = await reportResp.text();
+      setStatus('completed');
+    } catch (error) {
+      resultEl.textContent = 'Error: ' + error.message;
+      reportEl.value = '';
+      setStatus('error');
+    } finally {
+      runButton.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

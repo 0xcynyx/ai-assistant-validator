@@ -21,6 +21,8 @@ ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(ROOT / ".env")
 POLICY_DIR = ROOT / "policies"
 DB_PATH = ROOT / "output" / "policies.sqlite"
+OPENROUTER_BASE_URL = os.getenv("OPENROUTER_API_BASE", "https://openrouter.ai/v1")
+OPENAI_BASE_URL = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
 
 
 def _tokenize(text: str) -> List[str]:
@@ -49,7 +51,7 @@ def _get_client() -> Optional[OpenAI]:
     api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
     if not api_key:
         return None
-    base_url = "https://openrouter.ai/api/v1" if os.getenv("OPENROUTER_API_KEY") else "https://api.openai.com/v1"
+    base_url = OPENROUTER_BASE_URL if os.getenv("OPENROUTER_API_KEY") else OPENAI_BASE_URL
     return OpenAI(api_key=api_key, base_url=base_url)
 
 
